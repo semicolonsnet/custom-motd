@@ -111,7 +111,7 @@ function metrics {
         displayMessage 'I am a' "`uname -snrmo`"
         ;;
     'DATE')
-        displayMessage "My clock says it's " "`date +"%A, %e %B %Y`" "at" "`date %r"`"
+        displayMessage "My clock says it's" "`date +"%A, %e %B %Y`" "at" "`date %r`"
         ;;
     'UPTIME')
         let upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
@@ -119,10 +119,10 @@ function metrics {
         let min=$((${upSeconds}/60%60))
         let hour=$((${upSeconds}/3600%24))
         let day=$((${upSeconds}/86400))
-        displayMessage "I've been awake for" "`printf "%d days, %02dh hours %02dm minutes and %02ds seconds" "$day" "$hour" "$min" "$sec"`"
+        displayMessage "I've been awake for" "`printf "%d days, %02d hours %02d minutes and %02d seconds" "$day" "$hour" "$min" "$sec"`"
         ;;
     'MEMORY')
-        displayMessage 'My memory has' "`cat /proc/meminfo | grep MemFree | awk {'print $2'}`kB free of / `cat /proc/meminfo | grep MemTotal | awk {'print $2'}`kB total"
+        displayMessage 'My memory has' "`cat /proc/meminfo | grep MemFree | awk {'print $2'}`kB free of `cat /proc/meminfo | grep MemTotal | awk {'print $2'}`kB total"
         ;;
     'DISKS')
         disks="`df -hT -x tmpfs -x vfat | grep "^/dev/" | awk '{print $1" - "$5" free of "$3" (Total)"}'`"
@@ -130,7 +130,7 @@ function metrics {
         ;;
     'LOADAVERAGE')
         read one five fifteen rest < /proc/loadavg
-        displayMessage 'my load averages are' "${one}" "over the last minute," "${five}" "over the last five minutes, and" "${fifteen}" "over the last 15 minutes"
+        displayMessage "My load averages are ${one} over the last minute, ${five} over the last five minutes, and ${fifteen} over the last 15 minutes"
         ;;
     'PROCESSES')
         displayMessage 'Running Processes..:' "`ps ax | wc -l | tr -d " "`"
