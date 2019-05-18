@@ -15,8 +15,9 @@ whotest[0]='test' || (echo 'Failure: arrays not supported in your version of bas
 #############################################################################
 
 settings=(
-    LOGOSMALL
-#    LOGOBIG
+# LOGOSMALL
+# LOGOBIG
+    HELLO
     SYSTEM
     DATE
     UPTIME
@@ -36,7 +37,7 @@ settings=(
 weatherCode="EUR|UK|UK001|LONDON|"
 
 # Show temperatures in "C" for Celsius or "F" for Fahrenheit
-degrees=C
+degrees=F
 
 # Colour reference
 #    Colour    Value
@@ -102,11 +103,15 @@ function metrics {
               '~'"
         displayMessage '' "$logo"
         ;;
+    
+    'HELLO')
+        displayMessage 'Hello! My name is' "`uname -n`"
+        ;;
     'SYSTEM')
-        displayMessage 'System.............:' "`uname -snrmo`"
+        displayMessage 'I am a' "`uname -snrmo`"
         ;;
     'DATE')
-        displayMessage 'Date...............:' "`date +"%A, %e %B %Y, %r"`"
+        displayMessage "My clock says it's " "`date +"%A, %e %B %Y`" "at" "`date %r"`"
         ;;
     'UPTIME')
         let upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
@@ -114,18 +119,18 @@ function metrics {
         let min=$((${upSeconds}/60%60))
         let hour=$((${upSeconds}/3600%24))
         let day=$((${upSeconds}/86400))
-        displayMessage 'Uptime.............:' "`printf "%d days, %02dh %02dm %02ds" "$day" "$hour" "$min" "$sec"`"
+        displayMessage "I've been awake for" "`printf "%d days, %02dh hours %02dm minutes and %02ds seconds" "$day" "$hour" "$min" "$sec"`"
         ;;
     'MEMORY')
-        displayMessage 'Memory.............:' "`cat /proc/meminfo | grep MemFree | awk {'print $2'}`kB (Free) / `cat /proc/meminfo | grep MemTotal | awk {'print $2'}`kB (Total)"
+        displayMessage 'My memory has' "`cat /proc/meminfo | grep MemFree | awk {'print $2'}`kB free of / `cat /proc/meminfo | grep MemTotal | awk {'print $2'}`kB total"
         ;;
     'DISKS')
-        disks="`df -hT -x tmpfs -x vfat | grep "^/dev/" | awk '{print $1" - "$5" (Free) / "$3" (Total)"}'`"
-        displayMessage 'Disk...............:' "$disks"
+        disks="`df -hT -x tmpfs -x vfat | grep "^/dev/" | awk '{print $1" - "$5" free of "$3" (Total)"}'`"
+        displayMessage 'My disks include' "$disks"
         ;;
     'LOADAVERAGE')
         read one five fifteen rest < /proc/loadavg
-        displayMessage 'Load Average.......:' "${one}, ${five}, ${fifteen} (1, 5, 15 min)"
+        displayMessage 'my load averages are' "${one}" "over the last minute," "${five}" "over the last five minutes, and" "${fifteen}" "over the last 15 minutes"
         ;;
     'PROCESSES')
         displayMessage 'Running Processes..:' "`ps ax | wc -l | tr -d " "`"
